@@ -5,10 +5,10 @@
     v-loading.fullscreen.lock="loading"
     element-loading-text="拼命加载中">
     <template v-if="!loading">
-      <main-navbar />
-      <main-sidebar />
+      <main-navbar/>
+      <main-sidebar/>
       <div class="site-content__wrapper" :style="{ 'min-height': documentClientHeight + 'px' }">
-        <main-content />
+        <main-content/>
       </div>
     </template>
   </div>
@@ -18,6 +18,7 @@
   import MainNavbar from './main-navbar'
   import MainSidebar from './main-sidebar'
   import MainContent from './main-content'
+
   export default {
     data () {
       return {
@@ -31,19 +32,33 @@
     },
     computed: {
       documentClientHeight: {
-        get () { return this.$store.state.common.documentClientHeight },
-        set (val) { this.$store.commit('common/updateDocumentClientHeight', val) }
+        get () {
+          return this.$store.state.common.documentClientHeight
+        },
+        set (val) {
+          this.$store.commit('common/updateDocumentClientHeight', val)
+        }
       },
       sidebarFold: {
-        get () { return this.$store.state.common.sidebarFold }
+        get () {
+          return this.$store.state.common.sidebarFold
+        }
       },
       userId: {
-        get () { return this.$store.state.user.id },
-        set (val) { this.$store.commit('user/updateId', val) }
+        get () {
+          return this.$store.state.user.id
+        },
+        set (val) {
+          this.$store.commit('user/updateId', val)
+        }
       },
       userName: {
-        get () { return this.$store.state.user.name },
-        set (val) { this.$store.commit('user/updateName', val) }
+        get () {
+          return this.$store.state.user.name
+        },
+        set (val) {
+          this.$store.commit('user/updateName', val)
+        }
       }
     },
     created () {

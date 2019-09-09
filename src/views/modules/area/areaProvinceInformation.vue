@@ -1,13 +1,13 @@
 <template>
-  <div class="mod-role">
+  <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.roleName" placeholder="角色名称" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:role:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('area:areaProvinceInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('area:areaProvinceInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -15,7 +15,7 @@
       border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
-      style="width: 100%">
+      style="width: 100%;">
       <el-table-column
         type="selection"
         header-align="center"
@@ -23,17 +23,46 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="roleId"
+        prop="provinceId"
         header-align="center"
         align="center"
-        width="80"
-        label="ID">
+        label="自增列">
       </el-table-column>
       <el-table-column
-        prop="roleName"
+        prop="provinceCode"
         header-align="center"
         align="center"
-        label="角色名称">
+        label="省份代码">
+      </el-table-column>
+      <el-table-column
+        prop="provinceName"
+        header-align="center"
+        align="center"
+        label="省份名称">
+      </el-table-column>
+      <el-table-column
+        prop="shortName"
+        header-align="center"
+        align="center"
+        label="简称">
+      </el-table-column>
+      <el-table-column
+        prop="longitude"
+        header-align="center"
+        align="center"
+        label="经度">
+      </el-table-column>
+      <el-table-column
+        prop="latitude"
+        header-align="center"
+        align="center"
+        label="纬度">
+      </el-table-column>
+      <el-table-column
+        prop="sort"
+        header-align="center"
+        align="center"
+        label="排序">
       </el-table-column>
       <el-table-column
         prop="remark"
@@ -42,11 +71,23 @@
         label="备注">
       </el-table-column>
       <el-table-column
+        prop="useStatus"
+        header-align="center"
+        align="center"
+        :formatter="useStatusFormat"
+        label="状态">
+      </el-table-column>
+      <el-table-column
         prop="createTime"
         header-align="center"
         align="center"
-        width="180"
         label="创建时间">
+      </el-table-column>
+      <el-table-column
+        prop="updateTime"
+        header-align="center"
+        align="center"
+        label="修改时间">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -55,8 +96,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:role:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.roleId)">修改</el-button>
-          <el-button v-if="isAuth('sys:role:delete')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.provinceId)">修改</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.provinceId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -75,12 +116,12 @@
 </template>
 
 <script>
-  import AddOrUpdate from './role-add-or-update'
+  import AddOrUpdate from './areaprovinceinformation-add-or-update'
   export default {
     data () {
       return {
         dataForm: {
-          roleName: ''
+          key: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -102,12 +143,12 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/role/list'),
-          method: 'get',
-          params: this.$http.adornParams({
+          url: this.$http.adornUrl('/area/areaProvinceInformation/list'),
+          method: 'post',
+          data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'roleName': this.dataForm.roleName
+            'key': this.dataForm.key
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -145,7 +186,7 @@
       // 删除
       deleteHandle (id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.roleId
+          return item.provinceId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
@@ -153,7 +194,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/role/delete'),
+            url: this.$http.adornUrl('/area/areaProvinceInformation/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -167,11 +208,22 @@
                 }
               })
             } else {
-              this.$message.error(data.msg)
+              this.$message.error(data.message)
             }
           })
-        }).catch(() => {})
-      }
+        })
+      },
+       useStatusFormat (row, column) {
+          let useStatus = row[column.property];
+           if(useStatus === 1)
+           {
+               return "启用";
+           }
+           else
+           {
+               return "停用";
+           }
+       }
     }
   }
 </script>

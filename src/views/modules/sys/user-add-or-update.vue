@@ -3,7 +3,8 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+             label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="dataForm.userName" placeholder="登录帐号"></el-input>
       </el-form-item>
@@ -21,7 +22,8 @@
       </el-form-item>
       <el-form-item label="角色" size="mini" prop="roleIdList">
         <el-checkbox-group v-model="dataForm.roleIdList">
-          <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
+          <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}
+          </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="状态" size="mini" prop="status">
@@ -39,7 +41,8 @@
 </template>
 
 <script>
-  import { isEmail, isMobile } from '@/utils/validate'
+  import {isEmail, isMobile} from '@/utils/validate'
+
   export default {
     data () {
       var validatePassword = (rule, value, callback) => {
@@ -88,21 +91,21 @@
         },
         dataRule: {
           userName: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' }
+            {required: true, message: '用户名不能为空', trigger: 'blur'}
           ],
           password: [
-            { validator: validatePassword, trigger: 'blur' }
+            {validator: validatePassword, trigger: 'blur'}
           ],
           comfirmPassword: [
-            { validator: validateComfirmPassword, trigger: 'blur' }
+            {validator: validateComfirmPassword, trigger: 'blur'}
           ],
           email: [
-            { required: true, message: '邮箱不能为空', trigger: 'blur' },
-            { validator: validateEmail, trigger: 'blur' }
+            {required: true, message: '邮箱不能为空', trigger: 'blur'},
+            {validator: validateEmail, trigger: 'blur'}
           ],
           mobile: [
-            { required: true, message: '手机号不能为空', trigger: 'blur' },
-            { validator: validateMobile, trigger: 'blur' }
+            {required: true, message: '手机号不能为空', trigger: 'blur'},
+            {validator: validateMobile, trigger: 'blur'}
           ]
         }
       }

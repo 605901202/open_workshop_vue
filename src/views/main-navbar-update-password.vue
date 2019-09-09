@@ -3,7 +3,8 @@
     title="修改密码"
     :visible.sync="visible"
     :append-to-body="true">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+             label-width="80px">
       <el-form-item label="账号">
         <span>{{ userName }}</span>
       </el-form-item>
@@ -25,7 +26,8 @@
 </template>
 
 <script>
-  import { clearLoginInfo } from '@/utils'
+  import {clearLoginInfo} from '@/utils'
+
   export default {
     data () {
       var validateConfirmPassword = (rule, value, callback) => {
@@ -44,25 +46,31 @@
         },
         dataRule: {
           password: [
-            { required: true, message: '原密码不能为空', trigger: 'blur' }
+            {required: true, message: '原密码不能为空', trigger: 'blur'}
           ],
           newPassword: [
-            { required: true, message: '新密码不能为空', trigger: 'blur' }
+            {required: true, message: '新密码不能为空', trigger: 'blur'}
           ],
           confirmPassword: [
-            { required: true, message: '确认密码不能为空', trigger: 'blur' },
-            { validator: validateConfirmPassword, trigger: 'blur' }
+            {required: true, message: '确认密码不能为空', trigger: 'blur'},
+            {validator: validateConfirmPassword, trigger: 'blur'}
           ]
         }
       }
     },
     computed: {
       userName: {
-        get () { return this.$store.state.user.name }
+        get () {
+          return this.$store.state.user.name
+        }
       },
       mainTabs: {
-        get () { return this.$store.state.common.mainTabs },
-        set (val) { this.$store.commit('common/updateMainTabs', val) }
+        get () {
+          return this.$store.state.common.mainTabs
+        },
+        set (val) {
+          this.$store.commit('common/updateMainTabs', val)
+        }
       }
     },
     methods: {
@@ -95,7 +103,7 @@
                     this.$nextTick(() => {
                       this.mainTabs = []
                       clearLoginInfo()
-                      this.$router.replace({ name: 'login' })
+                      this.$router.replace({name: 'login'})
                     })
                   }
                 })

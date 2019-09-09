@@ -15,7 +15,7 @@
       border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
-      style="width: 100%;">
+      style="width: 100%">
       <el-table-column
         type="selection"
         header-align="center"

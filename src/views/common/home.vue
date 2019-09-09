@@ -1,34 +1,22 @@
 <template>
   <div class="mod-home">
-    <h3>项目介绍</h3>
+    <h3>企业信息登记平台</h3>
     <ul>
-      <li>renren-fast-vue基于vue、element-ui构建开发，实现<a href="https://gitee.com/renrenio/renren-fast" target="_blank">renren-fast</a>后台管理前端功能，提供一套更优的前端解决方案</li>
-      <li>前后端分离，通过token进行数据交互，可独立部署</li>
-      <li>主题定制，通过scss变量统一一站式定制</li>
-      <li>动态菜单，通过菜单管理统一管理访问路由</li>
-      <li>数据切换，通过mock配置对接口数据／mock模拟数据进行切换</li>
-      <li>发布时，可动态配置CDN静态资源／切换新旧版本</li>
-      <li>演示地址：<a href="http://fast.demo.renren.io" target="_blank">fast.demo.renren.io</a> (账号密码：admin/admin)</li>
+      <li>企业信息登记平台</li>
     </ul>
-    <h3>获取帮助</h3>
+    <h3>相关文件</h3>
     <ul>
-      <li>官方社区：<a href="//renren.io" target="_blank">renren.io</a></li>
-      <li>前端Git地址：<a href="//github.com/daxiongYang/renren-fast-vue" target="_blank">github.com/daxiongYang/renren-fast-vue</a></li>
-      <li>后台Git地址：<a href="//git.oschina.net/renrenio/renren-fast" target="_blank">git.oschina.net/renrenio/renren-fast</a></li>
-      <li>代码生成器：<a href="//git.oschina.net/renrenio/renren-generator" target="_blank">git.oschina.net/renrenio/renren-generator</a></li>
-      <li>如需关注项目最新动态，请Watch、Star项目，同时也是对项目最好的支持</li>
-    </ul>
-    <h3>官方QQ群</h3>
-    <ul>
-      <li>高级群：324780204(大牛云集，跟大牛学习新技能)</li>
-      <li>普通群：145799952(学习交流，互相解答各种疑问)</li>
+      <li><a
+        href="http://47.95.44.144/view?qt=%E6%9C%BA%E5%8A%A8%E8%BD%A6%E7%BB%B4%E4%BF%AE%E7%AE%A1%E7%90%86%E8%A7%84%E5%AE%9A&location=0&reference=3D918E1914024E90E7A5562317332984&url=B42B026EE0EB3C66C603A46561B8EA0F67B3EDB8D40F77B91735685A1E73C65069B5137F104CF76679050600CCDDD0F7CE4CF72D2C370771E1C7524B6C7154ED929741C766DA464B&title=%E6%9C%BA%E5%8A%A8%E8%BD%A6%E7%BB%B4%E4%BF%AE%E7%AE%A1%E7%90%86%E8%A7%84%E5%AE%9A.doc&tab=all&siteCode=bm19000004">机动车维修管理规定</a>
+      </li>
+      <li><a href="http://xxgk.mot.gov.cn/jigou/ysfws/201605/t20160504_2978661.html">交通运输部关于修改《机动车维修管理规定》的决定（交通运输部令2016年第37号）</a></li>
+      <li><a href="http://xxgk.mot.gov.cn/jigou/ysfws/201908/t20190809_3235816.html">交通运输部办公厅关于贯彻实施《机动车维修管理规定》的通知</a></li>
     </ul>
   </div>
 </template>
 
 <script>
-  export default {
-  }
+  export default {}
 </script>
 
 <style>

@@ -8,7 +8,7 @@
     <el-table
       :data="dataList"
       border
-      style="width: 100%;">
+      style="width: 100%">
       <el-table-column
         prop="menuId"
         header-align="center"
@@ -91,7 +91,8 @@
 <script>
   import TableTreeColumn from '@/components/table-tree-column'
   import AddOrUpdate from './menu-add-or-update'
-  import { treeDataTranslate } from '@/utils'
+  import {treeDataTranslate} from '@/utils'
+
   export default {
     data () {
       return {
