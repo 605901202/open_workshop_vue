@@ -4,11 +4,14 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="省份代码" prop="provinceCode">
-      <el-input v-model="dataForm.provinceCode" placeholder="省份代码"></el-input>
+    <el-form-item label="区代码" prop="areaCode">
+      <el-input v-model="dataForm.areaCode" placeholder="区代码"></el-input>
     </el-form-item>
-    <el-form-item label="省份名称" prop="provinceName">
-      <el-input v-model="dataForm.provinceName" placeholder="省份名称"></el-input>
+    <el-form-item label="父级市代码" prop="cityCode">
+      <el-input v-model="dataForm.cityCode" placeholder="父级市代码"></el-input>
+    </el-form-item>
+    <el-form-item label="市名称" prop="areaName">
+      <el-input v-model="dataForm.areaName" placeholder="市名称"></el-input>
     </el-form-item>
     <el-form-item label="简称" prop="shortName">
       <el-input v-model="dataForm.shortName" placeholder="简称"></el-input>
@@ -31,8 +34,8 @@
     <el-form-item label="备注" prop="remark">
       <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
     </el-form-item>
-    <el-form-item label="状态 0:停用 1:启用" prop="useStatus">
-      <el-input v-model="dataForm.useStatus" placeholder="状态 0:停用 1:启用"></el-input>
+    <el-form-item label="状态" prop="useStatus">
+      <el-input v-model="dataForm.useStatus" placeholder="状态"></el-input>
     </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -48,9 +51,10 @@
       return {
         visible: false,
         dataForm: {
-          provinceId: 0,
-          provinceCode: '',
-          provinceName: '',
+          areaId: 0,
+          areaCode: '',
+          cityCode: '',
+          areaName: '',
           shortName: '',
           longitude: '',
           latitude: '',
@@ -61,11 +65,14 @@
           useStatus: ''
         },
         dataRule: {
-          provinceCode: [
-            { required: true, message: '省份代码不能为空', trigger: 'blur' }
+          areaCode: [
+            { required: true, message: '区代码不能为空', trigger: 'blur' }
           ],
-          provinceName: [
-            { required: true, message: '省份名称不能为空', trigger: 'blur' }
+          cityCode: [
+            { required: true, message: '父级市代码不能为空', trigger: 'blur' }
+          ],
+          areaName: [
+            { required: true, message: '市名称不能为空', trigger: 'blur' }
           ],
           shortName: [
             { required: true, message: '简称不能为空', trigger: 'blur' }
@@ -89,34 +96,35 @@
             { required: true, message: '备注不能为空', trigger: 'blur' }
           ],
           useStatus: [
-            { required: true, message: '状态 0:停用 1:启用不能为空', trigger: 'blur' }
+            { required: true, message: '状态不能为空', trigger: 'blur' }
           ]
         }
       }
     },
     methods: {
       init (id) {
-        this.dataForm.provinceId = id || 0
+        this.dataForm.areaId = id || 0
         this.visible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
-          if (this.dataForm.provinceId) {
+          if (this.dataForm.areaId) {
             this.$http({
-              url: this.$http.adornUrl(`/area/areaprovinceinformation/info/${this.dataForm.provinceId}`),
+              url: this.$http.adornUrl(`/base/baseareainformation/info/${this.dataForm.areaId}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.provinceCode = data.areaprovinceinformation.provinceCode
-                this.dataForm.provinceName = data.areaprovinceinformation.provinceName
-                this.dataForm.shortName = data.areaprovinceinformation.shortName
-                this.dataForm.longitude = data.areaprovinceinformation.longitude
-                this.dataForm.latitude = data.areaprovinceinformation.latitude
-                this.dataForm.sort = data.areaprovinceinformation.sort
-                this.dataForm.createTime = data.areaprovinceinformation.createTime
-                this.dataForm.updateTime = data.areaprovinceinformation.updateTime
-                this.dataForm.remark = data.areaprovinceinformation.remark
-                this.dataForm.useStatus = data.areaprovinceinformation.useStatus
+                this.dataForm.areaCode = data.baseareainformation.areaCode
+                this.dataForm.cityCode = data.baseareainformation.cityCode
+                this.dataForm.areaName = data.baseareainformation.areaName
+                this.dataForm.shortName = data.baseareainformation.shortName
+                this.dataForm.longitude = data.baseareainformation.longitude
+                this.dataForm.latitude = data.baseareainformation.latitude
+                this.dataForm.sort = data.baseareainformation.sort
+                this.dataForm.createTime = data.baseareainformation.createTime
+                this.dataForm.updateTime = data.baseareainformation.updateTime
+                this.dataForm.remark = data.baseareainformation.remark
+                this.dataForm.useStatus = data.baseareainformation.useStatus
               }
             })
           }
@@ -127,12 +135,13 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/area/areaprovinceinformation/${!this.dataForm.provinceId ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/base/baseareainformation/${!this.dataForm.areaId ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
-                'provinceId': this.dataForm.provinceId || undefined,
-                'provinceCode': this.dataForm.provinceCode,
-                'provinceName': this.dataForm.provinceName,
+                'areaId': this.dataForm.areaId || undefined,
+                'areaCode': this.dataForm.areaCode,
+                'cityCode': this.dataForm.cityCode,
+                'areaName': this.dataForm.areaName,
                 'shortName': this.dataForm.shortName,
                 'longitude': this.dataForm.longitude,
                 'latitude': this.dataForm.latitude,
@@ -154,7 +163,7 @@
                   }
                 })
               } else {
-                this.$message.error(data.msg)
+                this.$message.error(data.message)
               }
             })
           }

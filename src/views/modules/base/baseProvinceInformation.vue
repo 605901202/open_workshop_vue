@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('area:areaProvinceInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('area:areaProvinceInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('base:baseProvinceInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('base:baseProvinceInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -65,19 +65,6 @@
         label="排序">
       </el-table-column>
       <el-table-column
-        prop="remark"
-        header-align="center"
-        align="center"
-        label="备注">
-      </el-table-column>
-      <el-table-column
-        prop="useStatus"
-        header-align="center"
-        align="center"
-        :formatter="useStatusFormat"
-        label="状态">
-      </el-table-column>
-      <el-table-column
         prop="createTime"
         header-align="center"
         align="center"
@@ -88,6 +75,18 @@
         header-align="center"
         align="center"
         label="修改时间">
+      </el-table-column>
+      <el-table-column
+        prop="remark"
+        header-align="center"
+        align="center"
+        label="备注">
+      </el-table-column>
+      <el-table-column
+        prop="useStatus"
+        header-align="center"
+        align="center"
+        label="状态 0:停用 1:启用">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -116,7 +115,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './areaprovinceinformation-add-or-update'
+  import AddOrUpdate from './baseProvinceInformation-add-or-update'
   export default {
     data () {
       return {
@@ -143,8 +142,8 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/area/areaProvinceInformation/list'),
-          method: 'post',
+          url: this.$http.adornUrl('/base/baseProvinceInformation/list'),
+          method: 'get',
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
@@ -194,7 +193,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/area/areaProvinceInformation/delete'),
+            url: this.$http.adornUrl('/base/baseProvinceInformation/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -212,18 +211,7 @@
             }
           })
         })
-      },
-       useStatusFormat (row, column) {
-          let useStatus = row[column.property];
-           if(useStatus === 1)
-           {
-               return "启用";
-           }
-           else
-           {
-               return "停用";
-           }
-       }
+      }
     }
   }
 </script>

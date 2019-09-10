@@ -86,15 +86,6 @@
           sort: [
             { required: true, message: '排序不能为空', trigger: 'blur' }
           ],
-          createTime: [
-            { required: true, message: '创建时间不能为空', trigger: 'blur' }
-          ],
-          updateTime: [
-            { required: true, message: '修改时间不能为空', trigger: 'blur' }
-          ],
-          remark: [
-            { required: true, message: '备注不能为空', trigger: 'blur' }
-          ],
           useStatus: [
             { required: true, message: '状态 0:停用 1:启用不能为空', trigger: 'blur' }
           ]
@@ -109,22 +100,22 @@
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.cityId) {
             this.$http({
-              url: this.$http.adornUrl(`/area/areacityinformation/info/${this.dataForm.cityId}`),
+              url: this.$http.adornUrl(`/base/baseCityInformation/info/${this.dataForm.cityId}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.cityCode = data.areacityinformation.cityCode
-                this.dataForm.cityName = data.areacityinformation.cityName
-                this.dataForm.shortName = data.areacityinformation.shortName
-                this.dataForm.provinceCode = data.areacityinformation.provinceCode
-                this.dataForm.longitude = data.areacityinformation.longitude
-                this.dataForm.latitude = data.areacityinformation.latitude
-                this.dataForm.sort = data.areacityinformation.sort
-                this.dataForm.createTime = data.areacityinformation.createTime
-                this.dataForm.updateTime = data.areacityinformation.updateTime
-                this.dataForm.remark = data.areacityinformation.remark
-                this.dataForm.useStatus = data.areacityinformation.useStatus
+                this.dataForm.cityCode = data.baseCityInformation.cityCode
+                this.dataForm.cityName = data.baseCityInformation.cityName
+                this.dataForm.shortName = data.baseCityInformation.shortName
+                this.dataForm.provinceCode = data.baseCityInformation.provinceCode
+                this.dataForm.longitude = data.baseCityInformation.longitude
+                this.dataForm.latitude = data.baseCityInformation.latitude
+                this.dataForm.sort = data.baseCityInformation.sort
+                this.dataForm.createTime = data.baseCityInformation.createTime
+                this.dataForm.updateTime = data.baseCityInformation.updateTime
+                this.dataForm.remark = data.baseCityInformation.remark
+                this.dataForm.useStatus = data.baseCityInformation.useStatus
               }
             })
           }
@@ -135,7 +126,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/area/areacityinformation/${!this.dataForm.cityId ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/base/baseCityInformation/${!this.dataForm.cityId ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
                 'cityId': this.dataForm.cityId || undefined,
@@ -146,8 +137,6 @@
                 'longitude': this.dataForm.longitude,
                 'latitude': this.dataForm.latitude,
                 'sort': this.dataForm.sort,
-                'createTime': this.dataForm.createTime,
-                'updateTime': this.dataForm.updateTime,
                 'remark': this.dataForm.remark,
                 'useStatus': this.dataForm.useStatus
               })
@@ -163,7 +152,7 @@
                   }
                 })
               } else {
-                this.$message.error(data.msg)
+                this.$message.error(data.message)
               }
             })
           }

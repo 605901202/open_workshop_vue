@@ -2,12 +2,12 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+        <el-input v-model="dataForm.cityName" placeholder="参数名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('area:areaCityInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('area:areaCityInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('base:baseCityInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('base:baseCityInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -68,20 +68,7 @@
         prop="sort"
         header-align="center"
         align="center"
-        label="权重">
-      </el-table-column>
-      <el-table-column
-        prop="remark"
-        header-align="center"
-        align="center"
-        label="备注">
-      </el-table-column>
-      <el-table-column
-        prop="useStatus"
-        header-align="center"
-        align="center"
-        :formatter="useStatusFormat"
-        label="状态">
+        label="排序">
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -94,6 +81,18 @@
         header-align="center"
         align="center"
         label="修改时间">
+      </el-table-column>
+      <el-table-column
+        prop="remark"
+        header-align="center"
+        align="center"
+        label="备注">
+      </el-table-column>
+      <el-table-column
+        prop="useStatus"
+        header-align="center"
+        align="center"
+        label="状态 0:停用 1:启用">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -122,12 +121,12 @@
 </template>
 
 <script>
-  import AddOrUpdate from './areaCityInformation-add-or-update'
+  import AddOrUpdate from './baseCityInformation-add-or-update'
   export default {
     data () {
       return {
         dataForm: {
-          key: ''
+          cityName: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -149,11 +148,12 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/area/areaCityInformation/list'),
+          url: this.$http.adornUrl('/base/baseCityInformation/list'),
           method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
+            'cityName': this.dataForm.cityName
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -190,7 +190,7 @@
       },
       // 删除
       deleteHandle (id) {
-        let ids = id ? [id] : this.dataListSelections.map(item => {
+        var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.cityId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
@@ -199,7 +199,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/area/areaCityInformation/delete'),
+            url: this.$http.adornUrl('/base/baseCityInformation/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -217,18 +217,7 @@
             }
           })
         })
-      },
-      useStatusFormat (row, column) {
-          let useStatus = row[column.property];
-          if(useStatus === 1)
-          {
-              return "启用";
-          }
-           else
-          {
-              return "停用";
-          }
-        }
+      }
     }
   }
 </script>
