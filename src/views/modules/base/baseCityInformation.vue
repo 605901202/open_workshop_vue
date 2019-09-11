@@ -2,12 +2,15 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.cityName" placeholder="参数名" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('base:baseCityInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('base:baseCityInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('base:baseCityInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
+        </el-button>
+        <el-button v-if="isAuth('base:baseCityInformation:delete')" type="danger" @click="deleteHandle()"
+                   :disabled="dataListSelections.length <= 0">批量删除
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -92,7 +95,7 @@
         prop="useStatus"
         header-align="center"
         align="center"
-        label="状态 0:停用 1:启用">
+        label="状态">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -122,11 +125,12 @@
 
 <script>
   import AddOrUpdate from './baseCityInformation-add-or-update'
+
   export default {
     data () {
       return {
         dataForm: {
-          cityName: ''
+          key: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -153,7 +157,7 @@
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'cityName': this.dataForm.cityName
+            'key': this.dataForm.key
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -190,7 +194,7 @@
       },
       // 删除
       deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
+        let ids = id ? [id] : this.dataListSelections.map(item => {
           return item.cityId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
@@ -217,6 +221,13 @@
             }
           })
         })
+      },
+      useStatusFormatter (row) {
+        if (row.useStatus === 1) {
+          return '启用'
+        } else {
+          return '停用'
+        }
       }
     }
   }

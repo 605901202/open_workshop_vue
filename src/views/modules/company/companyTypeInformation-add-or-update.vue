@@ -3,22 +3,23 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="企业性质名称" prop="companyTypeName">
-      <el-input v-model="dataForm.companyTypeName" placeholder="企业性质名称"></el-input>
-    </el-form-item>
-    <el-form-item label="权重" prop="sort">
-      <el-input v-model="dataForm.sort" placeholder="权重"></el-input>
-    </el-form-item>
-    <el-form-item label="备注" prop="remark">
-      <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
-    </el-form-item>
-    <el-form-item label="创建时间" prop="createTime">
-      <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="更新时间" prop="updateTime">
-      <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
-    </el-form-item>
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+             label-width="80px">
+      <el-form-item label="企业性质名称" prop="companyTypeName">
+        <el-input v-model="dataForm.companyTypeName" placeholder="企业性质名称"></el-input>
+      </el-form-item>
+      <el-form-item label="权重" prop="sort">
+        <el-input v-model="dataForm.sort" placeholder="权重"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+      </el-form-item>
+      <el-form-item label="创建时间" prop="createTime">
+        <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
+      </el-form-item>
+      <el-form-item label="更新时间" prop="updateTime">
+        <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -42,19 +43,19 @@
         },
         dataRule: {
           companyTypeName: [
-            { required: true, message: '企业性质名称不能为空', trigger: 'blur' }
+            {required: true, message: '企业性质名称不能为空', trigger: 'blur'}
           ],
           sort: [
-            { required: true, message: '权重不能为空', trigger: 'blur' }
+            {required: true, message: '权重不能为空', trigger: 'blur'}
           ],
           remark: [
-            { required: true, message: '备注不能为空', trigger: 'blur' }
+            {required: true, message: '备注不能为空', trigger: 'blur'}
           ],
           createTime: [
-            { required: true, message: '创建时间不能为空', trigger: 'blur' }
+            {required: true, message: '创建时间不能为空', trigger: 'blur'}
           ],
           updateTime: [
-            { required: true, message: '更新时间不能为空', trigger: 'blur' }
+            {required: true, message: '更新时间不能为空', trigger: 'blur'}
           ]
         }
       }

@@ -6,8 +6,11 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('company:companyInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('company:companyInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('company:companyInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
+        </el-button>
+        <el-button v-if="isAuth('company:companyInformation:delete')" type="danger" @click="deleteHandle()"
+                   :disabled="dataListSelections.length <= 0">批量删除
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -32,7 +35,7 @@
         prop="companyName"
         header-align="center"
         align="center"
-        label="经营者(企业)名称">
+        label="企业名称">
       </el-table-column>
       <el-table-column
         prop="companyAddress"
@@ -50,13 +53,19 @@
         prop="corporate"
         header-align="center"
         align="center"
-        label="法定代表人">
+        label="法人">
       </el-table-column>
       <el-table-column
         prop="taxNumber"
         header-align="center"
         align="center"
         label="统一社会信用代码">
+      </el-table-column>
+      <el-table-column
+        prop="roadLicenseNumber"
+        header-align="center"
+        align="center"
+        label="道路运输经营许可证号">
       </el-table-column>
       <el-table-column
         prop="principal"
@@ -68,19 +77,13 @@
         prop="principalNumber"
         header-align="center"
         align="center"
-        label="负责人身份证号码">
+        label="负责人身份证号">
       </el-table-column>
       <el-table-column
         prop="principalPhone"
         header-align="center"
         align="center"
-        label="负责人联系电话">
-      </el-table-column>
-      <el-table-column
-        prop="principalMail"
-        header-align="center"
-        align="center"
-        label="负责人邮箱">
+        label="负责人电话">
       </el-table-column>
       <el-table-column
         prop="remark"
@@ -89,28 +92,17 @@
         label="备注">
       </el-table-column>
       <el-table-column
-        prop="companyType"
+        prop="companyTypeInformationEntity.companyTypeName"
         header-align="center"
         align="center"
-        label="企业性质(类型)">
+        label="企业性质">
       </el-table-column>
       <el-table-column
         prop="useStatus"
+        :formatter="useStatusFormatter"
         header-align="center"
         align="center"
         label="是否启用">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        label="创建时间">
-      </el-table-column>
-      <el-table-column
-        prop="updateTime"
-        header-align="center"
-        align="center"
-        label="更新时间">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -140,6 +132,7 @@
 
 <script>
   import AddOrUpdate from './companyInformation-add-or-update'
+
   export default {
     data () {
       return {
@@ -167,7 +160,7 @@
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/company/companyInformation/list'),
-          method: 'get',
+          method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
@@ -208,7 +201,7 @@
       },
       // 删除
       deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
+        let ids = id ? [id] : this.dataListSelections.map(item => {
           return item.companyId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
@@ -235,6 +228,13 @@
             }
           })
         })
+      },
+      useStatusFormatter (row) {
+        if (row.useStatus === 1) {
+          return '启用'
+        } else {
+          return '停用'
+        }
       }
     }
   }

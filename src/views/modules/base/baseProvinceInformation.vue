@@ -6,8 +6,11 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('base:baseProvinceInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('base:baseProvinceInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('base:baseProvinceInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
+        </el-button>
+        <el-button v-if="isAuth('base:baseProvinceInformation:delete')" type="danger" @click="deleteHandle()"
+                   :disabled="dataListSelections.length <= 0">批量删除
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -116,6 +119,7 @@
 
 <script>
   import AddOrUpdate from './baseProvinceInformation-add-or-update'
+
   export default {
     data () {
       return {
@@ -143,7 +147,7 @@
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/base/baseProvinceInformation/list'),
-          method: 'get',
+          method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
@@ -184,7 +188,7 @@
       },
       // 删除
       deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
+        let ids = id ? [id] : this.dataListSelections.map(item => {
           return item.provinceId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
@@ -211,6 +215,13 @@
             }
           })
         })
+      },
+      useStatusFormatter (row) {
+        if (row.useStatus === 1) {
+          return '启用'
+        } else {
+          return '停用'
+        }
       }
     }
   }

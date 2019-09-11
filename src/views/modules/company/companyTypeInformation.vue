@@ -6,8 +6,11 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('company:companyTypeInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('company:companyTypeInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('company:companyTypeInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
+        </el-button>
+        <el-button v-if="isAuth('company:companyTypeInformation:delete')" type="danger" @click="deleteHandle()"
+                   :disabled="dataListSelections.length <= 0">批量删除
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -47,18 +50,6 @@
         label="备注">
       </el-table-column>
       <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        label="创建时间">
-      </el-table-column>
-      <el-table-column
-        prop="updateTime"
-        header-align="center"
-        align="center"
-        label="更新时间">
-      </el-table-column>
-      <el-table-column
         fixed="right"
         header-align="center"
         align="center"
@@ -86,6 +77,7 @@
 
 <script>
   import AddOrUpdate from './companyTypeInformation-add-or-update'
+
   export default {
     data () {
       return {
@@ -113,7 +105,7 @@
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/company/companyTypeInformation/list'),
-          method: 'get',
+          method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
@@ -154,7 +146,7 @@
       },
       // 删除
       deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
+        let ids = id ? [id] : this.dataListSelections.map(item => {
           return item.companyTypeId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
@@ -181,6 +173,13 @@
             }
           })
         })
+      },
+      useStatusFormatter (row) {
+        if (row.useStatus === 1) {
+          return '启用'
+        } else {
+          return '停用'
+        }
       }
     }
   }
