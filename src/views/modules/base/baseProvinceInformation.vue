@@ -1,6 +1,6 @@
 <template>
   <div class="mod-config">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataPage()">
       <el-form-item>
         <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
       </el-form-item>
@@ -35,13 +35,13 @@
         prop="provinceCode"
         header-align="center"
         align="center"
-        label="省份代码">
+        label="省代码">
       </el-table-column>
       <el-table-column
         prop="provinceName"
         header-align="center"
         align="center"
-        label="省份名称">
+        label="省名称">
       </el-table-column>
       <el-table-column
         prop="shortName"
@@ -140,14 +140,14 @@
       AddOrUpdate
     },
     activated () {
-      this.getDataList()
+      this.getDataPage()
     },
     methods: {
       // 获取数据列表
-      getDataList () {
+      getDataPage () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/base/baseProvinceInformation/list'),
+          url: this.$http.adornUrl('/base/baseProvinceInformation/page'),
           method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,

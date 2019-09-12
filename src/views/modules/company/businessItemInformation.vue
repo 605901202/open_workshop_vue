@@ -1,6 +1,6 @@
 <template>
   <div class="mod-config">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataPage()">
       <el-form-item>
         <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
       </el-form-item>
@@ -116,14 +116,14 @@
       AddOrUpdate
     },
     activated () {
-      this.getDataList()
+      this.getDataPage()
     },
     methods: {
       // 获取数据列表
-      getDataList () {
+      getDataPage () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/company/businessItemInformation/list'),
+          url: this.$http.adornUrl('/company/businessItemInformation/page'),
           method: 'get',
           data: this.$http.adornParams({
             'page': this.pageIndex,

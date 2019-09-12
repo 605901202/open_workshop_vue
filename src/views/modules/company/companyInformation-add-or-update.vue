@@ -209,10 +209,7 @@
         this.$http({
           url: this.$http.adornUrl('/company/companyTypeInformation/list'),
           method: 'post',
-          data: this.$http.adornParams({
-            'page': 1,
-            'limit': 20
-          })
+          data: this.$http.adornParams({})
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.companyTypeEntityList = data.page.list
