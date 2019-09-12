@@ -95,6 +95,7 @@
         prop="useStatus"
         header-align="center"
         align="center"
+        :formatter="useStatusFormatter"
         label="状态">
       </el-table-column>
       <el-table-column
