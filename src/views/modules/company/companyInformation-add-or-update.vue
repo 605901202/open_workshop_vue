@@ -3,16 +3,13 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :inline="true" :label-position="top" label-width="150px" :model="dataForm" :rules="dataRule" ref="dataForm"
+    <el-form :inline="true" label-width="150px" :model="dataForm" :rules="dataRule" ref="dataForm"
              @keyup.enter.native="dataFormSubmit()">
       <el-form-item label="企业名称" prop="companyName">
         <el-input v-model="dataForm.companyName" placeholder="企业名称"></el-input>
       </el-form-item>
       <el-form-item label="地址" prop="companyAddress">
         <el-input v-model="dataForm.companyAddress" placeholder="地址"></el-input>
-      </el-form-item>
-      <el-form-item label="地区代码" prop="addressCode">
-        <el-input v-model="dataForm.addressCode" placeholder="地区代码"></el-input>
       </el-form-item>
       <el-form-item label="法人" prop="corporate">
         <el-input v-model="dataForm.corporate" placeholder="法人"></el-input>
@@ -37,6 +34,16 @@
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+      </el-form-item>
+      <el-form-item label="所属地区" prop="addressCode">
+        <el-select v-model="dataForm.addressCode" placeholder="所属地区">
+          <el-option
+            v-for="provinceEntity in provinceEntityList"
+            :key="provinceEntity.provinceCode"
+            :label="provinceEntity.provinceName"
+            :value="provinceEntity.provinceCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="企业性质" prop="companyTypeId">
         <el-select v-model="dataForm.companyTypeId" placeholder="企业性质">
@@ -118,20 +125,15 @@
             {required: true, message: '是否启用不能为空', trigger: 'blur'}
           ]
         },
-        companyTypeEntityList: [{
-          value: '1',
-          label: '国有'
-        }, {
-          value: '2',
-          label: '集体'
-        }],
-        value: ''
+        companyTypeEntityList: [],
+        provinceEntityList: []
       }
     },
     methods: {
       init (id) {
         this.getCompanyTypeEntityList()
-        console.log(this.companyTypeEntityList)
+        this.getProvinceEntityList()
+        console.log(this.provinceEntityList)
         this.dataForm.companyId = id || 0
         this.visible = true
         this.$nextTick(() => {
@@ -216,6 +218,23 @@
             this.companyTypeEntityList = data.page.list
           } else {
             this.companyTypeEntityList = []
+          }
+        })
+      },
+      getProvinceEntityList () {
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl('/base/baseProvinceInformation/list'),
+          method: 'post',
+          data: this.$http.adornParams({
+            'page': 1,
+            'limit': 20
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.provinceEntityList = data.page.list
+          } else {
+            this.provinceEntityList = []
           }
         })
       }
