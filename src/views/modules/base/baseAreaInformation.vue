@@ -5,7 +5,7 @@
         <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
+        <el-button @click="getDataPage()">查询</el-button>
         <el-button v-if="isAuth('base:baseAreaInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
         </el-button>
         <el-button v-if="isAuth('base:baseAreaInformation:delete')" type="danger" @click="deleteHandle()"
@@ -32,10 +32,10 @@
         label="自增列">
       </el-table-column>
       <el-table-column
-        prop="areaCode"
+        prop="regionCode"
         header-align="center"
         align="center"
-        label="区代码">
+        label="区划代码">
       </el-table-column>
       <el-table-column
         prop="cityCode"

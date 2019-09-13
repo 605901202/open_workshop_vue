@@ -212,7 +212,7 @@
           data: this.$http.adornParams({})
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.companyTypeEntityList = data.page.list
+            this.companyTypeEntityList = data.list
           } else {
             this.companyTypeEntityList = []
           }
@@ -223,13 +223,10 @@
         this.$http({
           url: this.$http.adornUrl('/base/baseProvinceInformation/list'),
           method: 'post',
-          data: this.$http.adornParams({
-            'page': 1,
-            'limit': 20
-          })
+          data: this.$http.adornParams({})
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.provinceEntityList = data.page.list
+            this.provinceEntityList = data.list
           } else {
             this.provinceEntityList = []
           }

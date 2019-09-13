@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="省份代码" prop="provinceCode">
-      <el-input v-model="dataForm.provinceCode" placeholder="省份代码"></el-input>
+    <el-form-item label="省份代码" prop="regionCode">
+      <el-input v-model="dataForm.regionCode" placeholder="省份代码"></el-input>
     </el-form-item>
     <el-form-item label="省份名称" prop="provinceName">
       <el-input v-model="dataForm.provinceName" placeholder="省份名称"></el-input>
@@ -49,7 +49,7 @@
         visible: false,
         dataForm: {
           provinceId: 0,
-          provinceCode: '',
+          regionCode: '',
           provinceName: '',
           shortName: '',
           longitude: '',
@@ -61,7 +61,7 @@
           useStatus: ''
         },
         dataRule: {
-          provinceCode: [
+          regionCode: [
             { required: true, message: '省份代码不能为空', trigger: 'blur' }
           ],
           provinceName: [
@@ -107,7 +107,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.provinceCode = data.baseprovinceinformation.provinceCode
+                this.dataForm.regionCode = data.baseprovinceinformation.regionCode
                 this.dataForm.provinceName = data.baseprovinceinformation.provinceName
                 this.dataForm.shortName = data.baseprovinceinformation.shortName
                 this.dataForm.longitude = data.baseprovinceinformation.longitude
@@ -131,7 +131,7 @@
               method: 'post',
               data: this.$http.adornData({
                 'provinceId': this.dataForm.provinceId || undefined,
-                'provinceCode': this.dataForm.provinceCode,
+                'regionCode': this.dataForm.regionCode,
                 'provinceName': this.dataForm.provinceName,
                 'shortName': this.dataForm.shortName,
                 'longitude': this.dataForm.longitude,

@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="区代码" prop="areaCode">
-      <el-input v-model="dataForm.areaCode" placeholder="区代码"></el-input>
+    <el-form-item label="区代码" prop="regionCode">
+      <el-input v-model="dataForm.regionCode" placeholder="区代码"></el-input>
     </el-form-item>
     <el-form-item label="父级市代码" prop="cityCode">
       <el-input v-model="dataForm.cityCode" placeholder="父级市代码"></el-input>
@@ -52,7 +52,7 @@
         visible: false,
         dataForm: {
           areaId: 0,
-          areaCode: '',
+          regionCode: '',
           cityCode: '',
           areaName: '',
           shortName: '',
@@ -65,8 +65,8 @@
           useStatus: ''
         },
         dataRule: {
-          areaCode: [
-            { required: true, message: '区代码不能为空', trigger: 'blur' }
+          regionCode: [
+            { required: true, message: '区划代码不能为空', trigger: 'blur' }
           ],
           cityCode: [
             { required: true, message: '父级市代码不能为空', trigger: 'blur' }
@@ -114,7 +114,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.areaCode = data.baseareainformation.areaCode
+                this.dataForm.regionCode = data.baseareainformation.regionCode
                 this.dataForm.cityCode = data.baseareainformation.cityCode
                 this.dataForm.areaName = data.baseareainformation.areaName
                 this.dataForm.shortName = data.baseareainformation.shortName
@@ -139,7 +139,7 @@
               method: 'post',
               data: this.$http.adornData({
                 'areaId': this.dataForm.areaId || undefined,
-                'areaCode': this.dataForm.areaCode,
+                'regionCode': this.dataForm.regionCode,
                 'cityCode': this.dataForm.cityCode,
                 'areaName': this.dataForm.areaName,
                 'shortName': this.dataForm.shortName,

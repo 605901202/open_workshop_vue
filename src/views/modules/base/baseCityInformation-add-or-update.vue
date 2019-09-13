@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="市代码" prop="cityCode">
-      <el-input v-model="dataForm.cityCode" placeholder="市代码"></el-input>
+    <el-form-item label="市代码" prop="regionCode">
+      <el-input v-model="dataForm.regionCode" placeholder="市代码"></el-input>
     </el-form-item>
     <el-form-item label="市名称" prop="cityName">
       <el-input v-model="dataForm.cityName" placeholder="市名称"></el-input>
@@ -52,7 +52,7 @@
         visible: false,
         dataForm: {
           cityId: 0,
-          cityCode: '',
+          regionCode: '',
           cityName: '',
           shortName: '',
           provinceCode: '',
@@ -65,7 +65,7 @@
           useStatus: ''
         },
         dataRule: {
-          cityCode: [
+          regionCode: [
             { required: true, message: '市代码不能为空', trigger: 'blur' }
           ],
           cityName: [
@@ -105,7 +105,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.cityCode = data.baseCityInformation.cityCode
+                this.dataForm.regionCode = data.baseCityInformation.regionCode
                 this.dataForm.cityName = data.baseCityInformation.cityName
                 this.dataForm.shortName = data.baseCityInformation.shortName
                 this.dataForm.provinceCode = data.baseCityInformation.provinceCode
@@ -130,7 +130,7 @@
               method: 'post',
               data: this.$http.adornData({
                 'cityId': this.dataForm.cityId || undefined,
-                'cityCode': this.dataForm.cityCode,
+                'regionCode': this.dataForm.regionCode,
                 'cityName': this.dataForm.cityName,
                 'shortName': this.dataForm.shortName,
                 'provinceCode': this.dataForm.provinceCode,

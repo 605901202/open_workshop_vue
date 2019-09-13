@@ -32,7 +32,7 @@
         label="自增列">
       </el-table-column>
       <el-table-column
-        prop="provinceCode"
+        prop="regionCode"
         header-align="center"
         align="center"
         label="省代码">
