@@ -55,6 +55,15 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="业务类型" prop="serviceLevelId">
+        <el-input v-model="dataForm.serviceLevelId" placeholder="维修经营业务类型"></el-input>
+      </el-form-item>
+      <el-form-item label="创建时间" prop="createTime">
+        <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
+      </el-form-item>
+      <el-form-item label="更新时间" prop="updateTime">
+        <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
+      </el-form-item>
       <el-form-item label="是否启用" prop="useStatus">
         <el-radio-group v-model="dataForm.useStatus">
           <el-radio-button v-model="dataForm.useStatus" label="1">启用</el-radio-button>
@@ -88,7 +97,10 @@
           principalMail: '',
           remark: '',
           companyTypeId: '',
-          useStatus: ''
+          serviceLevelId: '',
+          useStatus: '',
+          createTime: '',
+          updateTime: ''
         },
         dataRule: {
           companyName: [
@@ -120,6 +132,9 @@
           ],
           companyTypeId: [
             {required: true, message: '企业性质(类型)不能为空', trigger: 'blur'}
+          ],
+          serviceLevelId: [
+            {required: true, message: '维修经营业务等级不能为空', trigger: 'blur'}
           ],
           useStatus: [
             {required: true, message: '是否启用不能为空', trigger: 'blur'}
@@ -157,7 +172,10 @@
                 this.dataForm.principalMail = data.companyInformation.principalMail
                 this.dataForm.remark = data.companyInformation.remark
                 this.dataForm.companyTypeId = data.companyInformation.companyTypeId
+                this.dataForm.serviceLevelId = data.companyInformation.serviceLevelId
                 this.dataForm.useStatus = data.companyInformation.useStatus
+                this.dataForm.createTime = data.companyInformation.createTime
+                this.dataForm.updateTime = data.companyInformation.updateTime
               }
             })
           }
@@ -184,6 +202,7 @@
                 'principalMail': this.dataForm.principalMail,
                 'remark': this.dataForm.remark,
                 'companyTypeId': this.dataForm.companyTypeId,
+                'serviceLevelId': this.dataForm.serviceLevelId,
                 'useStatus': this.dataForm.useStatus
               })
             }).then(({data}) => {

@@ -6,7 +6,7 @@
       </el-form-item>
 
       <el-form-item>
-        <!--        <el-select v-model="dataForm.addressCode" placeholder="请选择" filterable clearable>-->
+        <!--        <el-select v-model="dataForm.addressCode" placeholder="维修经营类别" filterable clearable>-->
         <!--          <el-option-->
         <!--            v-for="areaInformationEntity in areaInformationEntityList"-->
         <!--            :key="areaInformationEntity.areaCode"-->
@@ -18,6 +18,7 @@
 
       <el-form-item>
         <el-cascader
+          placeholder="所在区域"
           v-model="dataForm.addressCode"
           :props="{value: 'regionCode',label: 'shortName',children: 'childrenList'}"
           :options="provinceInformationEntityList" clearable>
@@ -119,6 +120,12 @@
         label="企业性质">
       </el-table-column>
       <el-table-column
+        prop="serviceLevelId"
+        header-align="center"
+        align="center"
+        label="企业性质">
+      </el-table-column>
+      <el-table-column
         prop="useStatus"
         :formatter="useStatusFormatter"
         header-align="center"
@@ -184,6 +191,10 @@
     methods: {
       // 获取数据列表
       getDataPage () {
+        let addressCodeInput = ''
+        if (this.dataForm.addressCode.length > 0) {
+          addressCodeInput = this.dataForm.addressCode[this.dataForm.addressCode.length - 1]
+        }
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/company/companyInformation/page'),
@@ -192,7 +203,7 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'companyName': this.dataForm.companyName,
-            'addressCode': this.dataForm.addressCode
+            'addressCode': addressCodeInput
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
