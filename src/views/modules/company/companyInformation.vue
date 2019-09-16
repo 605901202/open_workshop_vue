@@ -29,6 +29,7 @@
         <el-button @click="getDataPage()">查询</el-button>
         <el-button v-if="isAuth('company:companyInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
         </el-button>
+        <el-button type="primary" @click="exportData()">导出</el-button>
         <el-button v-if="isAuth('company:companyInformation:delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
@@ -199,7 +200,7 @@
         this.$http({
           url: this.$http.adornUrl('/company/companyInformation/page'),
           method: 'post',
-          data: this.$http.adornParams({
+          data: this.$http.adornData({
             'page': this.pageIndex,
             'limit': this.pageSize,
             'companyName': this.dataForm.companyName,
@@ -240,10 +241,10 @@
       },
       // 删除
       deleteHandle (id) {
-        let ids = id ? [id] : this.dataListSelections.map(item => {
+        let companyIdList = id ? [id] : this.dataListSelections.map(item => {
           return item.companyId
         })
-        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        this.$confirm(`确定对[id=${companyIdList.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -251,7 +252,9 @@
           this.$http({
             url: this.$http.adornUrl('/company/companyInformation/delete'),
             method: 'post',
-            data: this.$http.adornData(ids, false)
+            data: this.$http.adornData({
+              companyIdList: companyIdList
+            })
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({
@@ -280,6 +283,29 @@
           } else {
             this.provinceInformationEntityList = []
           }
+        })
+      },
+      exportData () {
+        let addressCodeInput = ''
+        if (this.dataForm.addressCode.length > 0) {
+          addressCodeInput = this.dataForm.addressCode[this.dataForm.addressCode.length - 1]
+        }
+        this.dataListLoading = true
+
+        this.$http({
+          url: this.$http.adornUrl('/company/companyInformation/exportExcel'),
+          method: 'post',
+          data: this.$http.adornData({
+            'companyName': this.dataForm.companyName,
+            'addressCode': addressCodeInput
+          }),
+          responseType: 'blob'
+        }).then((response) => {
+          let blob = new Blob([response.data], {
+            type: 'application/vnd.ms-excel'
+          })
+          window.location.href = URL.createObjectURL(blob)
+          this.dataListLoading = false
         })
       },
       useStatusFormatter (row) {
