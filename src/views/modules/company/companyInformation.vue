@@ -6,14 +6,14 @@
       </el-form-item>
 
       <el-form-item>
-        <!--        <el-select v-model="dataForm.addressCode" placeholder="维修经营类别" filterable clearable>-->
-        <!--          <el-option-->
-        <!--            v-for="areaInformationEntity in areaInformationEntityList"-->
-        <!--            :key="areaInformationEntity.areaCode"-->
-        <!--            :label="areaInformationEntity.areaName"-->
-        <!--            :value="areaInformationEntity.areaCode">-->
-        <!--          </el-option>-->
-        <!--        </el-select>-->
+        <el-select v-model="dataForm.serviceLevelId" placeholder="维修经营类别" filterable clearable>
+          <el-option
+            v-for="serviceLevelInformationEntity in serviceLevelInformationEntityList"
+            :key="serviceLevelInformationEntity.serviceLevelId"
+            :label="serviceLevelInformationEntity.serviceLevelName"
+            :value="serviceLevelInformationEntity.serviceLevelId">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item>
@@ -21,7 +21,7 @@
           placeholder="所在区域"
           v-model="dataForm.addressCode"
           :props="{value: 'regionCode',label: 'shortName',children: 'childrenList'}"
-          :options="provinceInformationEntityList" clearable>
+          :options="areaInformationEntityList" clearable>
         </el-cascader>
       </el-form-item>
 
@@ -121,10 +121,10 @@
         label="企业性质">
       </el-table-column>
       <el-table-column
-        prop="serviceLevelId"
+        prop="serviceLevelInformationEntity.serviceLevelName"
         header-align="center"
         align="center"
-        label="企业性质">
+        label="业务类型">
       </el-table-column>
       <el-table-column
         prop="useStatus"
@@ -168,7 +168,8 @@
       return {
         dataForm: {
           addressCode: [],
-          companyName: ''
+          companyName: '',
+          serviceLevelId: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -178,15 +179,16 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         selectedAreaName: '',
-        areaInformationEntityList: [],
-        provinceInformationEntityList: []
+        serviceLevelInformationEntityList: [],
+        areaInformationEntityList: []
       }
     },
     components: {
       AddOrUpdate
     },
     activated () {
-      this.getProvinceInformationEntityList()
+      this.getAreaInformationEntityList()
+      this.getServiceLevelInformationEntityList()
       this.getDataPage()
     },
     methods: {
@@ -271,7 +273,7 @@
           })
         })
       },
-      getProvinceInformationEntityList () {
+      getAreaInformationEntityList () {
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/base/baseProvinceInformation/list'),
@@ -279,9 +281,23 @@
           data: this.$http.adornParams({})
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.provinceInformationEntityList = data.list
+            this.areaInformationEntityList = data.list
           } else {
-            this.provinceInformationEntityList = []
+            this.areaInformationEntityList = []
+          }
+        })
+      },
+      getServiceLevelInformationEntityList () {
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl('/company/serviceLevelInformation/list'),
+          method: 'post',
+          data: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.serviceLevelInformationEntityList = data.list
+          } else {
+            this.serviceLevelInformationEntityList = []
           }
         })
       },
