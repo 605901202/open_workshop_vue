@@ -36,14 +36,12 @@
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
       <el-form-item label="所属地区" prop="addressCode">
-        <el-select v-model="dataForm.addressCode" placeholder="所属地区">
-          <el-option
-            v-for="provinceEntity in provinceEntityList"
-            :key="provinceEntity.provinceCode"
-            :label="provinceEntity.provinceName"
-            :value="provinceEntity.provinceCode">
-          </el-option>
-        </el-select>
+        <el-cascader
+          placeholder="所属地区"
+          v-model="dataForm.addressCode"
+          :props="{value: 'regionCode',label: 'shortName',children: 'childrenList'}"
+          :options="areaInformationEntityList" clearable>
+        </el-cascader>
       </el-form-item>
       <el-form-item label="企业性质" prop="companyTypeId">
         <el-select v-model="dataForm.companyTypeId" placeholder="企业性质">
@@ -56,18 +54,33 @@
         </el-select>
       </el-form-item>
       <el-form-item label="业务类型" prop="serviceLevelId">
-        <el-input v-model="dataForm.serviceLevelId" placeholder="维修经营业务类型"></el-input>
+        <el-select v-model="dataForm.serviceLevelId" placeholder="维修经营业务类型">
+          <el-option
+            v-for="serviceLevelInformationEntity in serviceLevelInformationEntityList"
+            :key="serviceLevelInformationEntity.serviceLevelId"
+            :label="serviceLevelInformationEntity.serviceLevelName"
+            :value="serviceLevelInformationEntity.serviceLevelId">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
-        <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
+        <el-date-picker
+          v-model="dataForm.createTime"
+          type="datetime"
+          placeholder="创建时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="更新时间" prop="updateTime">
-        <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
+        <el-date-picker
+          v-model="dataForm.updateTime"
+          type="datetime"
+          placeholder="更新时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="是否启用" prop="useStatus">
         <el-radio-group v-model="dataForm.useStatus">
-          <el-radio-button v-model="dataForm.useStatus" label="1">启用</el-radio-button>
-          <el-radio-button v-model="dataForm.useStatus" label="2">停用</el-radio-button>
+          <el-radio-button value="1" label="1">启用</el-radio-button>
+          <el-radio-button value="2" label="2">停用</el-radio-button>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -98,7 +111,7 @@
           remark: '',
           companyTypeId: '',
           serviceLevelId: '',
-          useStatus: '',
+          useStatus: 1,
           createTime: '',
           updateTime: ''
         },
@@ -141,14 +154,16 @@
           ]
         },
         companyTypeEntityList: [],
-        provinceEntityList: []
+        areaInformationEntityList: [],
+        serviceLevelInformationEntityList: []
       }
     },
     methods: {
       init (id) {
         this.getCompanyTypeEntityList()
         this.getProvinceEntityList()
-        console.log(this.provinceEntityList)
+        this.getAreaInformationEntityList()
+        this.getServiceLevelInformationEntityList()
         this.dataForm.companyId = id || 0
         this.visible = true
         this.$nextTick(() => {
@@ -192,7 +207,7 @@
                 'companyId': this.dataForm.companyId || undefined,
                 'companyName': this.dataForm.companyName,
                 'companyAddress': this.dataForm.companyAddress,
-                'addressCode': this.dataForm.addressCode,
+                'addressCode': this.dataForm.addressCode[2],
                 'corporate': this.dataForm.corporate,
                 'taxNumber': this.dataForm.taxNumber,
                 'roadLicenseNumber': this.dataForm.roadLicenseNumber,
@@ -248,6 +263,34 @@
             this.provinceEntityList = data.list
           } else {
             this.provinceEntityList = []
+          }
+        })
+      },
+      getAreaInformationEntityList () {
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl('/base/baseProvinceInformation/list'),
+          method: 'post',
+          data: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.areaInformationEntityList = data.list
+          } else {
+            this.areaInformationEntityList = []
+          }
+        })
+      },
+      getServiceLevelInformationEntityList () {
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl('/company/serviceLevelInformation/list'),
+          method: 'post',
+          data: this.$http.adornParams({})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.serviceLevelInformationEntityList = data.list
+          } else {
+            this.serviceLevelInformationEntityList = []
           }
         })
       }
