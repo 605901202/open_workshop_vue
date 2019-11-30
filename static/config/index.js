@@ -5,8 +5,7 @@
   window.SITE_CONFIG = {}
 
   // api接口请求地址
-  // window.SITE_CONFIG['baseUrl'] = 'https://company.chefile.com/CompanyInformation'
-  window.SITE_CONFIG['baseUrl'] = 'http://127.0.0.1:8080/CompanyInformation';
+  window.SITE_CONFIG['baseUrl'] = 'http://127.0.0.1:8080/open_workshop';
 
   // cdn地址 = 域名 + 版本号
   window.SITE_CONFIG['domain'] = './' // 域名

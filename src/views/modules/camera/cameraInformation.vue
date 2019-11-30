@@ -5,13 +5,9 @@
         <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('company:businessItemInformation:save')" type="primary" @click="addOrUpdateHandle()">
-          新增
-        </el-button>
-        <el-button v-if="isAuth('company:businessItemInformation:delete')" type="danger" @click="deleteHandle()"
-                   :disabled="dataListSelections.length <= 0">批量删除
-        </el-button>
+        <el-button @click="getDataPage()">查询</el-button>
+        <el-button v-if="isAuth('camera:cameraInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('camera:cameraInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -27,34 +23,58 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="businessItemId"
+        prop="cameraId"
         header-align="center"
         align="center"
-        label="经营项目信息ID">
+        label="相机ID">
       </el-table-column>
       <el-table-column
-        prop="businessItemName"
+        prop="cameraSn"
         header-align="center"
         align="center"
-        label="经营项目名称">
+        label="相机SN码">
       </el-table-column>
       <el-table-column
-        prop="fatherId"
+        prop="cameraAddress"
         header-align="center"
         align="center"
-        label="父项目ID">
+        label="相机地址">
       </el-table-column>
       <el-table-column
-        prop="sort"
+        prop="cameraTypeId"
         header-align="center"
         align="center"
-        label="权重">
+        label="相机类型ID">
       </el-table-column>
       <el-table-column
-        prop="remark"
+        prop="companyId"
         header-align="center"
         align="center"
-        label="备注">
+        label="对应企业ID">
+      </el-table-column>
+      <el-table-column
+        prop="simCardNumber"
+        header-align="center"
+        align="center"
+        label="内置SIM卡卡号">
+      </el-table-column>
+      <el-table-column
+        prop="ipAddress"
+        header-align="center"
+        align="center"
+        label="相机IP地址">
+      </el-table-column>
+      <el-table-column
+        prop="cameraUsername"
+        header-align="center"
+        align="center"
+        label="相机用户名">
+      </el-table-column>
+      <el-table-column
+        prop="cameraPassword"
+        header-align="center"
+        align="center"
+        label="相机密码">
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -75,8 +95,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.businessItemId)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.businessItemId)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.cameraId)">修改</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.cameraId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -90,13 +110,12 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataPage"></add-or-update>
   </div>
 </template>
 
 <script>
-  import AddOrUpdate from './businessItemInformation-add-or-update'
-
+  import AddOrUpdate from './cameraInformation-add-or-update'
   export default {
     data () {
       return {
@@ -123,8 +142,8 @@
       getDataPage () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/company/businessItemInformation/page'),
-          method: 'get',
+          url: this.$http.adornUrl('/camera/cameraInformation/page'),
+          method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
@@ -145,12 +164,12 @@
       sizeChangeHandle (val) {
         this.pageSize = val
         this.pageIndex = 1
-        this.getDataList()
+        this.getDataPage()
       },
       // 当前页
       currentChangeHandle (val) {
         this.pageIndex = val
-        this.getDataList()
+        this.getDataPage()
       },
       // 多选
       selectionChangeHandle (val) {
@@ -165,8 +184,8 @@
       },
       // 删除
       deleteHandle (id) {
-        let ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.businessItemId
+        var ids = id ? [id] : this.dataListSelections.map(item => {
+          return item.cameraId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
@@ -174,7 +193,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/company/businessItemInformation/delete'),
+            url: this.$http.adornUrl('/camera/cameraInformation/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -184,7 +203,7 @@
                 type: 'success',
                 duration: 1500,
                 onClose: () => {
-                  this.getDataList()
+                  this.getDataPage()
                 }
               })
             } else {
@@ -192,13 +211,6 @@
             }
           })
         })
-      },
-      useStatusFormatter (row) {
-        if (row.useStatus === 1) {
-          return '启用'
-        } else {
-          return '停用'
-        }
       }
     }
   }
