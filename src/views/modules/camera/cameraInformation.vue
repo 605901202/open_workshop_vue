@@ -95,6 +95,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.cameraId)">查看画面</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.cameraId)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.cameraId)">删除</el-button>
         </template>
