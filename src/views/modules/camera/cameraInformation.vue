@@ -6,8 +6,11 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataPage()">查询</el-button>
-        <el-button v-if="isAuth('camera:cameraInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('camera:cameraInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('camera:cameraInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
+        </el-button>
+        <el-button v-if="isAuth('camera:cameraInformation:delete')" type="danger" @click="deleteHandle()"
+                   :disabled="dataListSelections.length <= 0">批量删除
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -95,7 +98,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.cameraId)">查看画面</el-button>
+          <el-button type="text" size="small" @click="cameraViewHandle(scope.row.cameraId)">查看画面</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.cameraId)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.cameraId)">删除</el-button>
         </template>
@@ -117,6 +120,7 @@
 
 <script>
   import AddOrUpdate from './cameraInformation-add-or-update'
+
   export default {
     data () {
       return {
@@ -129,7 +133,8 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        cameraViewVisible: false
       }
     },
     components: {
@@ -212,6 +217,10 @@
             }
           })
         })
+      },
+      cameraViewHandle (id) {
+        this.cameraViewVisible = true
+        this.$router.replace('./camera-cameraView')
       }
     }
   }
