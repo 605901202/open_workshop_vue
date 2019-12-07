@@ -41,27 +41,26 @@
           <el-tag type="success" class="my-tag" v-for="(item,index) in hkvInfo.channels" :key="index">{{item}}</el-tag>
         </div>
       </el-col>
-      <!--
-            <el-col :span="12">
-              <div class="el-button-group ">
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(5)" @mouseup="mouseUpPTZControl">左上</div>
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(1)" @mouseup="mouseUpPTZControl">向上</div>
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(7)" @mouseup="mouseUpPTZControl">右上</div>
-              </div>
-              <br/>
-              <div class="el-button-group ">
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(3)" @mouseup="mouseUpPTZControl">向左</div>
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(9)" @mouseup="mouseUpPTZControl">自动</div>
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(4)" @mouseup="mouseUpPTZControl">向右</div>
-              </div>
-              <br/>
-              <div class="el-button-group ">
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(6)" @mouseup="mouseUpPTZControl">左下</div>
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(2)" @mouseup="mouseUpPTZControl">向下</div>
-                <div class="el-button primary" @mousedown="mouseDownPTZControl(8)" @mouseup="mouseUpPTZControl">右下</div>
-              </div>
-            </el-col>
-            -->
+      <el-col :span="12">
+        <div class="el-button-group ">
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(5)" @mouseup="mouseUpPTZControl()">左上</div>
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(1)" @mouseup="mouseUpPTZControl()">向上</div>
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(7)" @mouseup="mouseUpPTZControl()">右上</div>
+        </div>
+        <br/>
+        <div class="el-button-group ">
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(3)" @mouseup="mouseUpPTZControl()">向左</div>
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(9)" @mouseup="mouseUpPTZControl()">自动</div>
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(4)" @mouseup="mouseUpPTZControl()">向右</div>
+        </div>
+        <br/>
+        <div class="el-button-group ">
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(6)" @mouseup="mouseUpPTZControl()">左下</div>
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(2)" @mouseup="mouseUpPTZControl()">向下</div>
+          <div class="el-button primary" @mousedown="mouseDownPTZControl(8)" @mouseup="mouseUpPTZControl()">右下</div>
+        </div>
+      </el-col>
+
     </el-row>
   </div>
 </template>
@@ -309,6 +308,7 @@
               }
             },
             error: function (status, xmlDoc) {
+              console.info(WebVideoCtrl.I_GetLastError());
               console.log(oWndInfo.szDeviceIdentify + ' 开启云台失败！', status, xmlDoc)
             }
           })

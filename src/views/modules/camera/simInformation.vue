@@ -6,11 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataPage()">查询</el-button>
-        <el-button v-if="isAuth('camera:cameraInformation:save')" type="primary" @click="addOrUpdateHandle()">新增
-        </el-button>
-        <el-button v-if="isAuth('camera:cameraInformation:delete')" type="danger" @click="deleteHandle()"
-                   :disabled="dataListSelections.length <= 0">批量删除
-        </el-button>
+        <el-button v-if="isAuth('camera:simInformation:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('camera:simInformation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -26,58 +23,28 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="cameraId"
+        prop="simId"
         header-align="center"
         align="center"
-        label="相机ID">
+        label="SIM信息ID">
       </el-table-column>
       <el-table-column
-        prop="cameraSn"
+        prop="simNumber"
         header-align="center"
         align="center"
-        label="相机SN码">
+        label="SIM号码">
       </el-table-column>
       <el-table-column
-        prop="cameraAddress"
+        prop="operator"
         header-align="center"
         align="center"
-        label="相机地址">
-      </el-table-column>
-      <el-table-column
-        prop="cameraTypeId"
-        header-align="center"
-        align="center"
-        label="相机类型ID">
-      </el-table-column>
-      <el-table-column
-        prop="companyId"
-        header-align="center"
-        align="center"
-        label="对应企业ID">
-      </el-table-column>
-      <el-table-column
-        prop="simCardNumber"
-        header-align="center"
-        align="center"
-        label="内置SIM卡卡号">
+        label="运营商">
       </el-table-column>
       <el-table-column
         prop="ipAddress"
         header-align="center"
         align="center"
-        label="相机IP地址">
-      </el-table-column>
-      <el-table-column
-        prop="cameraUsername"
-        header-align="center"
-        align="center"
-        label="相机用户名">
-      </el-table-column>
-      <el-table-column
-        prop="cameraPassword"
-        header-align="center"
-        align="center"
-        label="相机密码">
+        label="IP地址">
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -98,9 +65,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="cameraViewHandle(scope.row.cameraId)">查看画面</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.cameraId)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.cameraId)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.simId)">修改</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.simId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -119,8 +85,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './cameraInformation-add-or-update'
-
+  import AddOrUpdate from './simInformation-add-or-update'
   export default {
     data () {
       return {
@@ -133,8 +98,7 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false,
-        cameraViewVisible: false
+        addOrUpdateVisible: false
       }
     },
     components: {
@@ -148,7 +112,7 @@
       getDataPage () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/camera/cameraInformation/page'),
+          url: this.$http.adornUrl('/camera/simInformation/page'),
           method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,
@@ -190,8 +154,8 @@
       },
       // 删除
       deleteHandle (id) {
-        let ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.cameraId
+        var ids = id ? [id] : this.dataListSelections.map(item => {
+          return item.simId
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
@@ -199,7 +163,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/camera/cameraInformation/delete'),
+            url: this.$http.adornUrl('/camera/simInformation/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -217,10 +181,6 @@
             }
           })
         })
-      },
-      cameraViewHandle (id) {
-        this.cameraViewVisible = true
-        this.$router.replace('./camera-cameraView')
       }
     }
   }
